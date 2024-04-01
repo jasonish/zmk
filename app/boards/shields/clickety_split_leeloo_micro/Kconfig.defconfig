@@ -1,0 +1,48 @@
+# Copyright (c) 2024 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+if SHIELD_LEELOO_MICRO_REV2_LEFT
+
+config ZMK_KEYBOARD_NAME
+    default "Leeloo-Micro 1.1"
+
+endif
+
+if SHIELD_LEELOO_MICRO_LEFT
+
+config ZMK_KEYBOARD_NAME
+    default "Leeloo-Micro"
+
+endif
+
+if SHIELD_LEELOO_MICRO_REV2_LEFT || SHIELD_LEELOO_MICRO_REV2_RIGHT
+
+config SHIELD_LEELOO_MICRO_PM
+    bool "ZMK Leeloo-Micro v1.1 Automatic Power Management"
+    default y
+    select ZMK_POWER_DOMAINS
+    select ZMK_POWER_DOMAINS_DYNAMIC_DEFAULT
+    select PM_DEVICE
+    select PM_DEVICE_POWER_DOMAIN
+    select PM_DEVICE_RUNTIME
+    select POWER_DOMAIN
+    select POWER_DOMAIN_GPIO
+
+endif
+
+if SHIELD_LEELOO_MICRO
+
+config ZMK_SPLIT
+    default y
+
+config SHIELD_SSD1306_128X64
+    select ZMK_DISPLAY
+
+config SHIELD_SSD1306_128X32
+    select ZMK_DISPLAY
+
+config ZMK_RGB_UNDERGLOW
+    select WS2812_STRIP
+    select SPI
+
+endif
