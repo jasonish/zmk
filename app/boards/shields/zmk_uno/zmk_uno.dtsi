@@ -47,12 +47,8 @@ nice_view_spi: &arduino_spi {
 
 / {
     chosen {
-        zmk,kscan = &kscan_matrix;
         zmk,backlight = &backlight;
         zmk,underglow = &led_strip;
-        zmk,matrix-transform = &matrix_transform;
-
-        zmk,display-default-power-domain = &core_power_domain;
     };
 
     core_power_domain: core_power_domain {
@@ -124,7 +120,6 @@ nice_view_spi: &arduino_spi {
     kscan_direct: kscan_direct {
         compatible = "zmk,kscan-gpio-direct";
         wakeup-source;
-        status = "disabled";
 
         input-gpios
         = <&arduino_header 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
