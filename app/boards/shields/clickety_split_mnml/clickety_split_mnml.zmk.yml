@@ -1,0 +1,12 @@
+file_format: "1"
+id: clickety_split_mnml
+name: MNML
+type: shield
+url: https://clicketysplit.ca/pages/mnml
+requires: [seeed_xiao]
+features:
+  - keys
+  - underglow
+siblings:
+  - clickety_split_mnml_left
+  - clickety_split_mnml_right

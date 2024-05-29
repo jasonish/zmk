@@ -1,0 +1,64 @@
+/*
+ * Copyright (c) 2024 The ZMK Contributors
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <dt-bindings/led/led.h>
+
+&pinctrl {
+    spi0_default: spi0_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 1, 13)>,
+                <NRF_PSEL(SPIM_MOSI, 1, 15)>;
+        };
+    };
+    spi0_sleep: spi0_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 1, 13)>,
+                <NRF_PSEL(SPIM_MOSI, 1, 15)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi0 {
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+
+    pinctrl-0 = <&spi0_default>;
+    pinctrl-1 = <&spi0_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    led_strip: ws2812@0 {
+        compatible = "worldsemi,ws2812-spi";
+
+        /* SPI */
+        reg = <0>; /* ignored, but necessary for SPI bindings */
+        spi-max-frequency = <4000000>;
+
+        /* WS2812 */
+        chain-length = <22>; /* The number of RGB LEDs per side. */
+        spi-one-frame = <0x70>;
+        spi-zero-frame = <0x40>;
+
+        color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
+
+        power-domain = <&rgb_power>;
+        zephyr,pm-device-runtime-auto;
+    };
+};
+
+/ {
+    chosen {
+        zmk,underglow = &led_strip;
+    };
+
+    rgb_power: rgb_power {
+        compatible = "power-domain-gpio";
+        startup-delay-us = <200>;
+        off-on-delay-us = <2000>;
+        enable-gpios = <&xiao_d 9 GPIO_ACTIVE_LOW>;
+        power-domain = <&core_power_domain>;
+        zephyr,pm-device-runtime-auto;
+    };
+};
