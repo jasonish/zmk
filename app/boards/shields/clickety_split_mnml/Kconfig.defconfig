@@ -1,0 +1,24 @@
+# Copyright (c) 2024 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+if SHIELD_CLICKETY_SPLIT_MNML_LEFT
+
+config ZMK_KEYBOARD_NAME
+    default "MNML v1.13"
+
+endif
+
+if SHIELD_CLICKETY_SPLIT_MNML_LEFT || SHIELD_CLICKETY_SPLIT_MNML_RIGHT
+
+config SHIELD_CLICKETY_SPLIT_MNML_PM
+    bool "ZMK MNML v1.13 Automatic Power Management"
+    default y
+    select ZMK_POWER_DOMAINS
+    select ZMK_POWER_DOMAINS_DYNAMIC_DEFAULT
+    select PM_DEVICE
+    select PM_DEVICE_POWER_DOMAIN
+    select PM_DEVICE_RUNTIME
+    select POWER_DOMAIN
+    select POWER_DOMAIN_GPIO
+
+endif
