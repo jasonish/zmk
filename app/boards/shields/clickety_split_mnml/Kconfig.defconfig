@@ -21,4 +21,7 @@ config SHIELD_CLICKETY_SPLIT_MNML_PM
     select POWER_DOMAIN
     select POWER_DOMAIN_GPIO
 
+config ZMK_PM_SOFT_OFF
+    default y if BOARD_NRF52840DK_NRF52840
+
 endif
