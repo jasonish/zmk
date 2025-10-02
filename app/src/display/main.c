@@ -7,6 +7,7 @@
 #include <zephyr/kernel.h>
 #include <zephyr/init.h>
 #include <zephyr/device.h>
+#include <zephyr/pm/device_runtime.h>
 #include <zephyr/devicetree.h>
 
 #include <zephyr/logging/log.h>
@@ -65,7 +66,16 @@ void unblank_display_cb(struct k_work *work) {
 #if DT_HAS_CHOSEN(zmk_display_led)
     led_on(display_led, display_led_idx);
 #endif
+    int err = pm_device_runtime_get(display);
+    if (err < 0) {
+        LOG_ERR("Failed to get the display device PM (%d)", err);
+        return;
+    }
+
     display_blanking_off(display);
+
+    lv_obj_invalidate(lv_scr_act());
+
 #if !IS_ENABLED(CONFIG_ARCH_POSIX)
     k_timer_start(&display_timer, K_MSEC(CONFIG_ZMK_DISPLAY_TICK_PERIOD_MS),
                   K_MSEC(CONFIG_ZMK_DISPLAY_TICK_PERIOD_MS));
@@ -82,6 +92,7 @@ void blank_display_cb(struct k_work *work) {
 #if DT_HAS_CHOSEN(zmk_display_led)
     led_off(display_led, display_led_idx);
 #endif
+    pm_device_runtime_put(display);
 }
 K_WORK_DEFINE(blank_display_work, blank_display_cb);
 K_WORK_DEFINE(unblank_display_work, unblank_display_cb);
