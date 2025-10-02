@@ -51,9 +51,6 @@ nice_view_spi: &arduino_spi {
     chosen {
         zmk,backlight = &backlight;
         zmk,underglow = &led_strip;
-        zmk,matrix-transform = &matrix_transform;
-
-        zmk,display-default-power-domain = &core_power_domain;
     };
 
     core_power_domain: core_power_domain {
